@@ -1,0 +1,42 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --orange: #E8571A;
+  --orange-light: #FFF0E8;
+  --orange-mid: #FF9F74;
+  --dark: #1A1A1A;
+  --mid: #4A4A4A;
+  --muted: #888888;
+  --border: rgba(0, 0, 0, 0.08);
+  --bg: #FAFAF8;
+  --card: #FFFFFF;
+  --green: #2D7A4F;
+  --green-bg: #EBF7F1;
+  --amber: #B86A00;
+  --amber-bg: #FFF5E0;
+  --blue: #1A5FA8;
+  --blue-bg: #E8F1FB;
+  --red: #A32D2D;
+  --red-bg: #FCEBEB;
+  --purple: #534AB7;
+  --purple-bg: #EEEDFE;
+}
+
+html { font-size: 16px; }
+
+body {
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+button { cursor: pointer; font-family: 'DM Sans', sans-serif; }
+input, textarea { font-family: 'DM Sans', sans-serif; }
