@@ -19,7 +19,7 @@ export default function Profile({ xp, streak, completedIds }) {
           AS
         </div>
         <div>
-          <p style={{ fontFamily: 'Syne, sans-serif', fontSize: 18, fontWeight: 700, color: 'var(--dark)' }}>Ayush Sharma</p>
+          <p style={{ fontFamily: 'Syne, sans-serif', fontSize: 18, fontWeight: 700, color: 'var(--dark)' }}>Rishabh Sharma</p>
           <p style={{ fontSize: 13, color: 'var(--muted)' }}>Level {level} · {levelName}</p>
         </div>
       </div>
@@ -51,7 +51,7 @@ export default function Profile({ xp, streak, completedIds }) {
           <p style={{ fontSize: 13, color: 'var(--mid)', lineHeight: 1.7 }}>
             SkillSprint is a gamified web app for PM skill-building — built to address the UX friction points identified in a competitive audit of Buildd and Duolingo. Daily challenges, streaks, and leaderboards make deliberate practice feel like a game.
           </p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10 }}>Built by Ayush Sharma · Product Associate</p>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10 }}>Built by Rishabh Sharma · Product Associate</p>
         </div>
       </div>
     </div>
