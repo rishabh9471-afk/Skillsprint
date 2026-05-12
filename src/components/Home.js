@@ -15,7 +15,7 @@ export default function Home({ onStartChallenge, completedIds, xp }) {
       {/* Header */}
       <div style={{ padding: '22px 24px 0' }}>
         <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 2 }}>Good morning,</p>
-        <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 24, fontWeight: 700, color: 'var(--dark)' }}>Ayush</h1>
+        <h1 style={{ fontFamily: 'Syne, sans-serif', fontSize: 24, fontWeight: 700, color: 'var(--dark)' }}>Rishabh</h1>
       </div>
 
       {/* XP Progress */}
