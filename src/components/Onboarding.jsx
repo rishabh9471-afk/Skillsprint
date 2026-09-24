@@ -58,23 +58,19 @@ export default function Onboarding({ onDone }) {
         <h1>
           Practise PM interviews with an AI coach that <span className="hl">pushes back</span>.
         </h1>
-        <p className="lead">
-          Write your answer to a real product scenario. Get scored against a rubric, see your weakest paragraph rewritten, then face
-          the interviewer's follow-up questions.
-        </p>
         <ol className="steps">
           <li>
             <span className="step-n">1</span>
             <div>
               <strong>Write</strong>
-              <span>Answer a scenario in your own words</span>
+              <span>Answer a real product scenario</span>
             </div>
           </li>
           <li>
             <span className="step-n">2</span>
             <div>
               <strong>Get coached</strong>
-              <span>Rubric scores, evidence, a stronger rewrite</span>
+              <span>Scores, evidence and a sharper rewrite</span>
             </div>
           </li>
           <li>
@@ -91,7 +87,6 @@ export default function Onboarding({ onDone }) {
         {mode === 'new' ? (
           <form onSubmit={start} noValidate>
             <h2>Pick a nickname</h2>
-            <p className="muted">It shows on the weekly leaderboard. No sign-up, no email.</p>
             <label className="field">
               <span>Nickname</span>
               <input
@@ -114,7 +109,6 @@ export default function Onboarding({ onDone }) {
         ) : (
           <form onSubmit={recover} noValidate>
             <h2>Restore your progress</h2>
-            <p className="muted">Enter the recovery code you saved, like SPRINT-7K2P9X.</p>
             <label className="field">
               <span>Recovery code</span>
               <input
@@ -136,10 +130,7 @@ export default function Onboarding({ onDone }) {
             </button>
           </form>
         )}
-        <p className="fineprint">
-          Answers are graded by a free AI service that may use them to improve its models. Please don't include personal or
-          confidential information.
-        </p>
+        <p className="fineprint">Answers are graded by AI. Please avoid personal or confidential details.</p>
       </div>
     </div>
   );

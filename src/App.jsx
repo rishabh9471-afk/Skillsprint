@@ -14,6 +14,7 @@ import Verdict from './components/Verdict.jsx';
 import Leaderboard from './components/Leaderboard.jsx';
 import ProfileSheet from './components/ProfileSheet.jsx';
 import Modal from './components/Modal.jsx';
+import Splash from './components/Splash.jsx';
 import { Banner } from './components/ui.jsx';
 
 /* The in-progress session, saved in the browser after every change:
@@ -36,6 +37,8 @@ export default function App() {
   const [view, setView] = useState(() => (restoreActive(load(KEYS.active)) ? 'session' : 'home')); // home | session | leaderboard
   const [profileOpen, setProfileOpen] = useState(false);
   const [confirm, setConfirm] = useState(null);
+  const [splash, setSplash] = useState(false);
+  const endSplash = useCallback(() => setSplash(false), []);
   const online = useOnline();
 
   // Persist everything the user would hate to lose.
@@ -78,6 +81,7 @@ export default function App() {
   // ---------------------------------------------------------------- actions
 
   function onboard(v, restored) {
+    setSplash(true);
     setVisitor(v);
     if (restored) setProgress(restored);
   }
@@ -232,8 +236,11 @@ export default function App() {
       />
       <main className="main">
         {banners}
-        {body}
+        <div className="view" key={inSession ? `${active.sessionId}-${active.step}` : view}>
+          {body}
+        </div>
       </main>
+      {splash && <Splash nickname={visitor.nickname} onDone={endSplash} />}
       {profileOpen && <ProfileSheet visitor={visitor} progress={progress} onClose={() => setProfileOpen(false)} onCopied={markCodeSaved} onSignOut={signOut} />}
       {confirm && (
         <Modal

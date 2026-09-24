@@ -24,7 +24,7 @@ export default function ProfileSheet({ visitor, progress, onClose, onCopied, onS
       {visitor.recoveryCode ? (
         <div className="code">
           <strong>Your recovery code</strong>
-          <p className="muted small">Use it to restore your progress on another device or after clearing your browser.</p>
+          <p className="muted small">Restores your XP on any device.</p>
           <div className="code-row">
             <code className="code-value">{visitor.recoveryCode}</code>
             <button className="btn btn-ghost" onClick={copy}>

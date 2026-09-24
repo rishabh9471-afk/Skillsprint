@@ -2,6 +2,8 @@
 
 A guest writes an answer to a product-management scenario, gets rubric-based AI feedback with a rewrite of their weakest paragraph, revises or faces two interviewer follow-ups, and ends with a verdict and XP. A weekly leaderboard and a private metrics dashboard are included.
 
+📄 **[Product requirements (PRD)](PRD.md)** · 🔗 **[Live app](https://skillsprint-kappa.vercel.app)**
+
 **Runs entirely on free tiers:** Vercel (hosting + serverless functions), Google Gemini (AI grading), Groq (AI fallback) and Supabase (database).
 
 ---

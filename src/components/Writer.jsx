@@ -19,6 +19,7 @@ export default function Writer({ scenario, active, visitor, online, update, onEx
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null); // { code, message }
   const inFlight = useRef(false); // blocks double submits within the same tick
+  const [trimmed, setTrimmed] = useState(false);
   const ref = useAutosize(active.draft);
   const loadingMsg = useRotating(LOADING, busy);
 
@@ -31,7 +32,9 @@ export default function Writer({ scenario, active, visitor, online, update, onEx
 
   function onChange(e) {
     let v = e.target.value;
-    if (countWords(v) > LIMITS.MAX_WORDS) v = capWords(v, LIMITS.MAX_WORDS);
+    const over = countWords(v) > LIMITS.MAX_WORDS;
+    if (over) v = capWords(v, LIMITS.MAX_WORDS);
+    setTrimmed(over || (trimmed && countWords(v) >= LIMITS.MAX_WORDS));
     update({ draft: v, notAnswer: null });
     if (error && error.code !== 'daily_limit' && error.code !== 'paused') setError(null);
   }
@@ -92,6 +95,7 @@ export default function Writer({ scenario, active, visitor, online, update, onEx
       </div>
       <p className="question">{scenario.prompt}</p>
 
+
       {last && (
         <div className="revision-box">
           <div className="revision-top">
@@ -104,7 +108,7 @@ export default function Writer({ scenario, active, visitor, online, update, onEx
             <strong>Focus on:</strong> {last.result.topFix}
           </p>
           <button className="link-btn" onClick={() => update({ step: 'feedback', draft: last.answer, notAnswer: null })} disabled={busy}>
-            Cancel revision and go back to feedback
+            Back to feedback
           </button>
         </div>
       )}
@@ -118,21 +122,18 @@ export default function Writer({ scenario, active, visitor, online, update, onEx
         className="answer"
         value={active.draft}
         onChange={onChange}
-        placeholder="Think out loud like you would in an interview: state the goal, compare the options, make a call, and say how you'd know it worked."
+        placeholder="Answer like you would in the interview…"
         disabled={busy}
         spellCheck
       />
-      <WordMeter text={active.draft} />
-      <p className="saved-note">
-        <Icon.check /> Draft saved on this device
-      </p>
+      <WordMeter text={active.draft} trimmed={trimmed} />
 
       {active.notAnswer && (
         <Banner tone="warn">
-          <strong>This doesn't answer the scenario yet.</strong> {active.notAnswer} This didn't use up a revision.
+          <strong>This doesn't answer the scenario yet.</strong> {active.notAnswer}
         </Banner>
       )}
-      {unchanged && !busy && <Banner tone="info">Change something before resubmitting — the coach needs a new version to compare.</Banner>}
+      {unchanged && !busy && <p className="hint">Edit your answer to resubmit.</p>}
       {error && (
         <Banner tone={error.code === 'daily_limit' || error.code === 'paused' ? 'info' : 'bad'}>
           {error.message}
@@ -159,9 +160,7 @@ export default function Writer({ scenario, active, visitor, online, update, onEx
             </>
           )}
         </button>
-        {!online && <span className="muted small">You're offline — your draft is safe.</span>}
       </div>
-      <p className="fineprint">Graded by a free AI service. Please don't include personal or confidential information.</p>
     </div>
   );
 }

@@ -44,7 +44,7 @@ export default function Feedback({ scenario, active, update, onExit }) {
           <p className="fb-summary">{result.summary}</p>
           {result.confidence === 'low' && (
             <p className="muted small">
-              <Icon.info /> This one's borderline — reasonable graders could differ by about a point.
+              <Icon.info /> Borderline call — could be a point either way.
             </p>
           )}
         </div>
@@ -59,8 +59,8 @@ export default function Feedback({ scenario, active, update, onExit }) {
 
       <h2 className="section-title">Rubric breakdown</h2>
       <div className="dims">
-        {result.dimensions.map((d) => (
-          <div key={d.name} className="dim card">
+        {result.dimensions.map((d, k) => (
+          <div key={d.name} className="dim card" style={{ '--i': k }}>
             <div className="dim-top">
               <strong>{d.name}</strong>
               <span className={`dim-score tone-${scoreTone(d.score)}`}>{d.score}/10</span>
@@ -69,7 +69,7 @@ export default function Feedback({ scenario, active, update, onExit }) {
               <div className={`bar-fill tone-bg-${scoreTone(d.score)}`} style={{ width: `${d.score * 10}%` }} />
             </div>
             <p>{d.comment}</p>
-            {d.evidence ? <blockquote>“{d.evidence}”</blockquote> : <span className="not-addressed">Not addressed in your answer</span>}
+            {d.evidence ? <blockquote>“{d.evidence}”</blockquote> : <span className="not-addressed">Not addressed</span>}
           </div>
         ))}
       </div>
@@ -87,31 +87,28 @@ export default function Feedback({ scenario, active, update, onExit }) {
       </div>
 
       {result.injectionAttempt && (
-        <Banner tone="info">Part of your answer read like instructions to the AI. It was graded as ordinary text.</Banner>
+        <Banner tone="info">Part of your answer read like instructions to the AI, so it was graded as plain text.</Banner>
       )}
 
       <div className="rate">
-        <span>Was this feedback helpful?</span>
+        <span>Helpful?</span>
         <button className={`rate-btn ${active.rated === 'up' ? 'is-on' : ''}`} onClick={() => rate('up')} disabled={Boolean(active.rated)} aria-label="Helpful">
           <Icon.up />
         </button>
         <button className={`rate-btn ${active.rated === 'down' ? 'is-on' : ''}`} onClick={() => rate('down')} disabled={Boolean(active.rated)} aria-label="Not helpful">
           <Icon.down />
         </button>
-        {active.rated && <span className="muted small">Thanks — this helps improve the coach.</span>}
+        {active.rated && <span className="muted small thanks">Thanks!</span>}
       </div>
 
       <div className="next card">
-        <h2>What next?</h2>
         <div className="next-options">
           <div className={`next-option ${revisionsLeft === 0 ? 'is-disabled' : ''}`}>
             <Icon.edit />
             <div>
               <strong>Revise your answer</strong>
               <span>
-                {revisionsLeft > 0
-                  ? `${revisionsLeft} of ${LIMITS.MAX_REVISIONS} revisions left. Improve by 1+ point for a +15 XP bonus.`
-                  : "You've used both revisions."}
+                {revisionsLeft > 0 ? `${revisionsLeft} left · +15 XP if you improve by 1+` : 'No revisions left'}
               </span>
             </div>
             <button className="btn btn-ghost" onClick={revise} disabled={revisionsLeft === 0}>
@@ -122,7 +119,7 @@ export default function Feedback({ scenario, active, update, onExit }) {
             <Icon.mic />
             <div>
               <strong>Face the interviewer</strong>
-              <span>2 follow-up questions on your answer, then your final verdict and XP.</span>
+              <span>2 follow-ups, then your verdict</span>
             </div>
             <button className="btn btn-primary" onClick={interview}>
               Start interview <Icon.arrow />

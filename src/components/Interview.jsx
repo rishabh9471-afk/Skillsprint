@@ -14,13 +14,20 @@ export default function Interview({ scenario, active, visitor, online, progress,
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const inFlight = useRef(false);
+  const [trimmed, setTrimmed] = useState([false, false]);
   const loadingMsg = useRotating(LOADING, busy);
   const reply = i < 2 ? active.replies[i] : '';
   const ref = useAutosize(reply);
   const ctx = { sessionId: active.sessionId, scenarioId: scenario.id };
 
   function setReply(v) {
-    if (countWords(v) > LIMITS.FU_MAX_WORDS) v = capWords(v, LIMITS.FU_MAX_WORDS);
+    const over = countWords(v) > LIMITS.FU_MAX_WORDS;
+    if (over) v = capWords(v, LIMITS.FU_MAX_WORDS);
+    setTrimmed((t) => {
+      const n = [...t];
+      n[i] = over || (t[i] && countWords(v) >= LIMITS.FU_MAX_WORDS);
+      return n;
+    });
     const replies = [...active.replies];
     replies[i] = v;
     update({ replies });
@@ -82,7 +89,7 @@ export default function Interview({ scenario, active, visitor, online, progress,
             <div key={k} className="chat-turn">
               <div className="bubble bubble-them">
                 <span className="who">
-                  <Icon.mic /> Interviewer · Question {k + 1} of 2
+                  <Icon.mic /> Interviewer · {k + 1} of 2
                 </span>
                 <p>{q}</p>
               </div>
@@ -112,25 +119,31 @@ export default function Interview({ scenario, active, visitor, online, progress,
             className="answer answer-sm"
             value={reply}
             onChange={(e) => setReply(e.target.value)}
-            placeholder="Answer like you would out loud: direct, specific, with a number or an example if you can."
+            placeholder="Your reply…"
             autoFocus
           />
-          <div className="reply-meta">
-            <span className="muted small">Aim for 30–150 words</span>
+          <div className={`reply-meta ${words >= LIMITS.FU_MAX_WORDS ? 'is-limit' : ''}`} aria-live="polite">
+            <span className="small">
+              {words >= LIMITS.FU_MAX_WORDS
+                ? trimmed[i]
+                  ? `Limit reached — text beyond ${LIMITS.FU_MAX_WORDS} words was cut`
+                  : 'Word limit reached'
+                : words > 0 && !canAnswer
+                  ? `Write at least ${LIMITS.FU_MIN_WORDS} words, or skip`
+                  : 'Aim for 30–150 words'}
+            </span>
             <span className="mono small">
               {words} / {LIMITS.FU_MAX_WORDS}
             </span>
           </div>
           <div className="reply-actions">
             <button className="btn btn-ghost" onClick={() => next(true)}>
-              Skip question
+              Skip
             </button>
             <button className="btn btn-primary" onClick={() => next(false)} disabled={!canAnswer}>
-              {i === 0 ? 'Answer & next question' : 'Answer & get verdict'} <Icon.arrow />
+              {i === 0 ? 'Next question' : 'Get my verdict'} <Icon.arrow />
             </button>
           </div>
-          {!canAnswer && words > 0 && <p className="muted small">Write at least {LIMITS.FU_MIN_WORDS} words, or skip this question.</p>}
-          {i === 1 && <p className="muted small">Skipping a question means no follow-up XP bonus.</p>}
         </div>
       ) : (
         <div className="verdict-wait card">

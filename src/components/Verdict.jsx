@@ -21,6 +21,13 @@ export default function Verdict({ scenario, active, visitor, onNext, onLeaderboa
   return (
     <div className="session verdict-page">
       <div className={`verdict-hero card tone-border-${VERDICTS[v.verdict].tone}`}>
+        {v.verdict === 'strong' && (
+          <div className="burst" aria-hidden="true">
+            {Array.from({ length: 14 }, (_, k) => (
+              <i key={k} style={{ '--k': k }} />
+            ))}
+          </div>
+        )}
         <span className="eyebrow">Final verdict · {scenario.title}</span>
         <VerdictBadge verdict={v.verdict} large />
         <div className="verdict-scores">
@@ -51,7 +58,7 @@ export default function Verdict({ scenario, active, visitor, onNext, onLeaderboa
           <strong>+{xp} XP</strong>
         </div>
         {v.practice ? (
-          <p className="muted">Practice run — XP is only awarded the first time you complete a scenario.</p>
+          <p className="muted">Practice run — XP counts once per scenario.</p>
         ) : (
           <ul className="xp-lines">
             <li>
@@ -119,9 +126,7 @@ export default function Verdict({ scenario, active, visitor, onNext, onLeaderboa
         <div className="code card">
           <div>
             <strong>Save your recovery code</strong>
-            <p className="muted small">
-              No account needed. Use this code to get your XP back on another device, or if your browser clears its data.
-            </p>
+            <p className="muted small">Restores your XP on any device.</p>
           </div>
           <div className="code-row">
             <code className="code-value">{visitor.recoveryCode}</code>

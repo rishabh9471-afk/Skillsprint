@@ -88,6 +88,28 @@ export const Icon = {
       <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6" />
     </svg>
   ),
+  layers: (p) => (
+    <svg {...base} {...p}>
+      <path d="m12 3 9 5-9 5-9-5z" />
+      <path d="m3 13 9 5 9-5" />
+    </svg>
+  ),
+  chart: (p) => (
+    <svg {...base} {...p}>
+      <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
+    </svg>
+  ),
+  bulb: (p) => (
+    <svg {...base} {...p}>
+      <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" />
+    </svg>
+  ),
+  people: (p) => (
+    <svg {...base} {...p}>
+      <circle cx="9" cy="8" r="3.5" />
+      <path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5" />
+    </svg>
+  ),
   x: (p) => (
     <svg {...base} {...p}>
       <path d="M6 6l12 12M18 6 6 18" />
@@ -103,6 +125,16 @@ export function Banner({ tone = 'info', children, action }) {
       <div className="banner-body">{children}</div>
       {action}
     </div>
+  );
+}
+
+const SKILL_ICON = { prioritization: 'layers', metrics: 'chart', 'product-sense': 'bulb', stakeholders: 'people' };
+export function SkillIcon({ skill }) {
+  const I = Icon[SKILL_ICON[skill]];
+  return (
+    <span className={`skill-icon chip-${SKILLS[skill].color}`} aria-hidden="true">
+      <I />
+    </span>
   );
 }
 
@@ -147,6 +179,7 @@ export function ScoreRing({ score, size = 120, label = 'out of 10' }) {
           strokeLinecap="round"
           strokeDasharray={c}
           strokeDashoffset={c * (1 - pct)}
+          style={{ '--c': c }}
           transform={`rotate(-90 ${size / 2} ${size / 2})`}
         />
       </svg>
@@ -163,35 +196,33 @@ export function VerdictBadge({ verdict, large }) {
   return <span className={`verdict verdict-${v.tone} ${large ? 'verdict-lg' : ''}`}>{v.label}</span>;
 }
 
-/** Word count with guidance for the main answer. */
-export function WordMeter({ text }) {
+/** Word count with guidance for the main answer. `trimmed` = text was cut at the limit. */
+export function WordMeter({ text, trimmed }) {
   const n = countWords(text);
   let tone = 'bad';
   let msg = `Write at least ${LIMITS.MIN_WORDS} words`;
   if (n >= LIMITS.MAX_WORDS) {
     tone = 'warn';
-    msg = 'Word limit reached';
+    msg = trimmed ? `Limit reached — text beyond ${LIMITS.MAX_WORDS} words was cut` : 'Word limit reached';
   } else if (n > LIMITS.GUIDE_MAX) {
     tone = 'warn';
-    msg = 'Getting long — interviewers value concise answers';
+    msg = 'Getting long — keep it tight';
   } else if (n >= LIMITS.GUIDE_MIN) {
     tone = 'good';
     msg = 'Good length';
   } else if (n >= LIMITS.MIN_WORDS) {
     tone = 'warn';
-    msg = `Good start — aim for ${LIMITS.GUIDE_MIN}–${LIMITS.GUIDE_MAX} words`;
+    msg = `Aim for ${LIMITS.GUIDE_MIN}–${LIMITS.GUIDE_MAX} words`;
   }
   const pct = Math.min(100, (n / LIMITS.GUIDE_MAX) * 100);
   return (
     <div className={`meter meter-${tone}`} aria-live="polite">
       <div className="meter-track">
         <div className="meter-fill" style={{ width: `${pct}%` }} />
-        <div className="meter-mark" style={{ left: `${(LIMITS.MIN_WORDS / LIMITS.GUIDE_MAX) * 100}%` }} />
-        <div className="meter-mark" style={{ left: `${(LIMITS.GUIDE_MIN / LIMITS.GUIDE_MAX) * 100}%` }} />
       </div>
       <div className="meter-text">
         <span>{msg}</span>
-        <span className="mono">
+        <span className={`mono ${n >= LIMITS.MAX_WORDS ? 'at-limit' : ''}`}>
           {n} / {LIMITS.MAX_WORDS}
         </span>
       </div>

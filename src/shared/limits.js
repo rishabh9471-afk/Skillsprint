@@ -15,7 +15,7 @@ export const SKILLS = {
   prioritization: { label: 'Prioritisation', color: 'orange' },
   metrics: { label: 'Metrics', color: 'blue' },
   'product-sense': { label: 'Product sense', color: 'green' },
-  stakeholders: { label: 'Stakeholders', color: 'violet' },
+  stakeholders: { label: 'Stakeholders', color: 'pink' },
 };
 
 export const VERDICTS = {
